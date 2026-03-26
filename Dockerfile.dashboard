@@ -1,0 +1,30 @@
+FROM node:20-alpine AS frontend-build
+
+WORKDIR /frontend
+
+COPY remote_dashboard/frontend/package.json remote_dashboard/frontend/package-lock.json ./
+RUN npm ci
+
+COPY remote_dashboard/frontend ./
+RUN npm run build
+
+
+FROM python:3.12-slim AS base
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+COPY remote_dashboard remote_dashboard
+COPY remote_dashboard/requirements.txt remote_dashboard/requirements.txt
+COPY --from=frontend-build /frontend/dist /app/remote_dashboard/frontend/dist
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r remote_dashboard/requirements.txt
+
+ENV LOGGER_DASHBOARD_API_BASE_URL=http://logger-api:8100/api
+
+EXPOSE 8200
+
+CMD ["uvicorn", "remote_dashboard.main:app", "--host", "0.0.0.0", "--port", "8200"]

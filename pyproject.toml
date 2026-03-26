@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logger"
+version = "0.1.0"
+description = "Biblioteca para geração de logs estruturados com formatação colorida, arquivos separados e monitoramento de CPU/Memória. Inclui recursos de profiling, barra de progresso e captura de prints."
+readme = "README.md"
+authors = [{name = "Elian Abrão"}]
+license = {file = "LICENSE"}
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["logging", "structured", "console"]
+urls = {homepage = "https://dev.azure.com/qualysystem/RPA/_git/Logger_Module", repository = "https://dev.azure.com/qualysystem/RPA/_git/Logger_Module"}
+dependencies = [
+    "colorama>=0.4,<0.5",
+    "psutil>=5.9,<8",
+    "requests>=2.31,<3",
+    "wcwidth>=0.2,<0.3",
+    "pyautogui>=0.9,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest",
+    "pytest-cov",
+    "bandit",
+    "safety",
+    "build",
+    "sphinx",
+]
+api = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.1",
+    "pydantic-settings>=2.4",
+    "aio-pika>=9.4",
+    "minio>=7.2",
+    "python-multipart>=0.0.7",
+    "python-jose[cryptography]>=3.3",
+    "bcrypt>=4.0",
+]
+
+[project.scripts]
+logger-demo = "logger.cli.demo:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["logger*"]
+
+[tool.setuptools.package-data]
+"logger" = ["*.pyi"]
+
+[tool.mypy]
+ignore_missing_imports = true

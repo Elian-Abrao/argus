@@ -1,0 +1,22 @@
+[[sources]]
+id = "logger_db"
+description = "PostgreSQL source for the Argus AI monitoring assistant."
+type = "postgres"
+host = "${DB_HOST}"
+port = "${DB_PORT}"
+database = "${DB_NAME}"
+user = "${DB_USER}"
+password = "${DB_PASSWORD}"
+connection_timeout = 10
+query_timeout = 120
+lazy = true
+
+[[tools]]
+name = "search_objects"
+source = "logger_db"
+
+[[tools]]
+name = "execute_sql"
+source = "logger_db"
+readonly = true
+max_rows = 200

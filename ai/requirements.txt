@@ -1,0 +1,8 @@
+git+https://github.com/Elian-Abrao/codex-bridge.git#subdirectory=sdk
+git+https://github.com/Elian-Abrao/codex-bridge.git
+fastapi
+mcp
+psycopg[binary]
+python-dotenv
+pydantic
+uvicorn

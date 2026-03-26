@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Logger Agent
+Exec=gnome-terminal -- bash -lc '$HOME/Scripts/Logger_Agent/scripts/start_logger_agent.sh; echo; echo "Agent finalizado. Pressione Enter para fechar."; read'
+X-GNOME-Autostart-enabled=true
+Terminal=false

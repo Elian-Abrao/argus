@@ -1,0 +1,20 @@
+FROM python:3.12-slim AS base
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+COPY pyproject.toml README.md ./
+COPY logger logger
+COPY remote_api remote_api
+COPY scripts scripts
+COPY db db
+COPY requirements.lock requirements.lock
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir ".[api]"
+
+EXPOSE 8100
+
+CMD ["uvicorn", "remote_api.main:app", "--host", "0.0.0.0", "--port", "8100"]

@@ -1,0 +1,15 @@
+# Argus Platform Configuration
+# Edit this file to customize your Argus deployment.
+
+platform:
+  name: "Argus"
+  tagline: "Intelligent automation monitoring"
+  logo_url: ""           # URL or relative path to your logo image
+  primary_color: "#6366f1"
+  support_url: ""
+
+ai:
+  name: "Argus AI"                         # Display name for the AI assistant
+  avatar_url: "/ai/avatar.webp"            # Path or URL to assistant avatar
+  greeting: "Hello! How can I help you monitor your automations today?"
+  language: "en"                           # Language for AI responses (e.g. pt-BR, en, es)
