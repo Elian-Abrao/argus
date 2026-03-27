@@ -39,13 +39,28 @@ print("Vai para o log")
 ## 5) Captura automatica de emails (smtplib)
 ```python
 from logger import start_logger
+from email.message import EmailMessage
+import os
 import smtplib
 
 logger = start_logger("Mailer", capture_emails=True)
+smtp_user = "rpa2@teste.com.br"
+smtp_password = os.getenv("SMTP_PASSWORD")
+smtp_server = "smtp.office365.com"
+porta = 587
 
-with smtplib.SMTP("smtp.office365.com", 587) as server:
+msg = EmailMessage()
+msg["From"] = smtp_user
+msg["To"] = "destinatario@teste.com.br"
+msg["Subject"] = "Teste SMTP Office 365"
+msg.set_content("Mensagem de teste")
+
+with smtplib.SMTP(smtp_server, porta) as server:
+    server.starttls()
+    if smtp_password:
+        server.login(smtp_user, smtp_password)
     # qualquer sendmail/send_message passa a gerar evento EMAIL_CAPTURE
-    pass
+    server.send_message(msg)
 ```
 
 ## 6) Modo servidor

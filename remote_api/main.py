@@ -15,6 +15,7 @@ from .email_schema import ensure_email_schema
 from .control_schema import ensure_control_schema
 from .auth_schema import ensure_auth_schema
 from .retention import cleanup_expired_email_data, stop_stale_running_runs
+from .database import ensure_database_schema
 
 
 logger = logging.getLogger("remote_api.main")
@@ -157,6 +158,7 @@ def create_app() -> FastAPI:
     @app.on_event("startup")
     async def _startup():
         nonlocal retention_task, stale_runs_task, schedule_checker_task, command_expiry_task
+        ensure_database_schema()
         ensure_auth_schema()
         ensure_email_schema()
         ensure_control_schema()

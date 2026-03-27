@@ -309,8 +309,8 @@ def test_capture_emails_sendmail_logs_payload(tmp_path, caplog, monkeypatch):
     )
 
     msg = MIMEMultipart()
-    msg["From"] = "smtp@treeinova.com.br"
-    msg["To"] = "destinatario@treeinova.com.br"
+    msg["From"] = "rpa2@teste.com.br"
+    msg["To"] = "destinatario@teste.com.br"
     msg["Subject"] = "Teste de envio"
     msg.attach(MIMEText("Corpo em texto", "plain"))
 
@@ -323,16 +323,16 @@ def test_capture_emails_sendmail_logs_payload(tmp_path, caplog, monkeypatch):
     with caplog.at_level(logging.INFO):
         with smtplib.SMTP() as server:
             server.sendmail(
-                "smtp@treeinova.com.br",
-                ["destinatario@treeinova.com.br", "oculto@treeinova.com.br"],
+                "rpa2@teste.com.br",
+                ["destinatario@teste.com.br", "oculto@teste.com.br"],
                 msg.as_string(),
             )
 
     payload = _extract_email_payload(caplog)
     assert payload is not None
     assert payload["assunto"] == "Teste de envio"
-    assert payload["destinatarios"] == ["destinatario@treeinova.com.br"]
-    assert payload["destinatarios_copia_oculta"] == ["oculto@treeinova.com.br"]
+    assert payload["destinatarios"] == ["destinatario@teste.com.br"]
+    assert payload["destinatarios_copia_oculta"] == ["oculto@teste.com.br"]
     assert payload["status"] == "enviado"
     assert "relatorio.csv" in payload["paths_arquivos"]
     assert payload["corpo"]["texto"] == "Corpo em texto"
@@ -352,8 +352,8 @@ def test_capture_emails_sendmail_logs_failure(tmp_path, caplog, monkeypatch):
     )
 
     msg = MIMEMultipart()
-    msg["From"] = "smtp@treeinova.com.br"
-    msg["To"] = "destinatario@treeinova.com.br"
+    msg["From"] = "rpa2@teste.com.br"
+    msg["To"] = "destinatario@teste.com.br"
     msg["Subject"] = "Teste falha"
     msg.attach(MIMEText("Corpo", "plain"))
 
@@ -361,8 +361,8 @@ def test_capture_emails_sendmail_logs_failure(tmp_path, caplog, monkeypatch):
         try:
             with smtplib.SMTP() as server:
                 server.sendmail(
-                    "smtp@treeinova.com.br",
-                    ["destinatario@treeinova.com.br"],
+                    "rpa2@teste.com.br",
+                    ["destinatario@teste.com.br"],
                     msg.as_string(),
                 )
         except RuntimeError:
