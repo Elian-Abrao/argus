@@ -28,7 +28,21 @@ docker compose up -d
 docker compose exec argus-api python -m scripts.create_admin
 ```
 
-After startup, access the Argus dashboard through your configured reverse proxy.
+For local development, this repository also includes a `docker-compose.override.yml`
+that exposes the main services directly:
+
+- Dashboard: `http://localhost:8200`
+- API health: `http://localhost:8100/api/health`
+- MinIO API: `http://localhost:9010`
+- MinIO console: `http://localhost:9011`
+- RabbitMQ management: `http://localhost:15678`
+
+The default admin bootstrap script creates:
+
+- Email: `admin@example.com`
+- Password: `Admin@2025!`
+
+In production, access the Argus dashboard through your configured reverse proxy.
 
 Use `.env.example` as the reference for required environment variables and `nginx/logger_nginx.conf` as the base template for proxy setup.
 

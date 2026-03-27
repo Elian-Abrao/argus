@@ -1,9 +1,9 @@
-"""SQLAlchemy engine and session utilities."""
+"""SQLAlchemy engine, schema bootstrap, and session utilities."""
 
 from contextlib import contextmanager
 from typing import Generator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
 
 from .config import get_settings
@@ -16,6 +16,15 @@ engine = create_engine(
     future=True,
 )
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False, class_=Session)
+
+
+def ensure_database_schema() -> None:
+    """Create the base PostgreSQL extension and ORM-managed tables if missing."""
+    from .models import Base
+
+    with engine.begin() as conn:
+        conn.execute(text('CREATE EXTENSION IF NOT EXISTS "pgcrypto"'))
+    Base.metadata.create_all(bind=engine)
 
 
 @contextmanager

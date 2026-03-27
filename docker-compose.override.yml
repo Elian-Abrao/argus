@@ -1,0 +1,8 @@
+services:
+  argus-api:
+    ports:
+      - "8100:8100"
+
+  argus-dashboard:
+    ports:
+      - "8200:8200"

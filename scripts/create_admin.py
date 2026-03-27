@@ -1,4 +1,4 @@
-"""Script para criar o usuário administrador inicial.
+"""Script para criar o usuario administrador inicial.
 
 Uso:
     python -m scripts.create_admin
@@ -6,15 +6,14 @@ Uso:
     python scripts/create_admin.py
 """
 
-import sys
 import os
+import sys
 
-# Permite rodar tanto como módulo quanto como script direto
+# Permite rodar tanto como modulo quanto como script direto.
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from remote_api.database import session_scope, engine
-from remote_api.models import Base
-from remote_api.auth.crud import get_user_by_email, create_user
+from remote_api.auth.crud import create_user, get_user_by_email
+from remote_api.database import ensure_database_schema, session_scope
 
 
 def main() -> None:
@@ -23,19 +22,25 @@ def main() -> None:
     full_name = "Admin"
     role = "admin"
 
-    print("Criando tabelas (se necessário)...")
-    Base.metadata.create_all(bind=engine)
+    print("Criando tabelas (se necessario)...")
+    ensure_database_schema()
 
     with session_scope() as session:
         existing = get_user_by_email(session, email)
         if existing:
-            print(f"Usuário já existe: {email} (role={existing.role})")
+            print(f"Usuario ja existe: {email} (role={existing.role})")
             return
 
-        user = create_user(session, email=email, password=password, full_name=full_name, role=role)
+        user = create_user(
+            session,
+            email=email,
+            password=password,
+            full_name=full_name,
+            role=role,
+        )
         session.commit()
         session.refresh(user)
-        print(f"Admin criado com sucesso!")
+        print("Admin criado com sucesso!")
         print(f"  ID    : {user.id}")
         print(f"  Nome  : {user.full_name}")
         print(f"  Email : {user.email}")
